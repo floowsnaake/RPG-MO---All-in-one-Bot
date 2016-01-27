@@ -47,12 +47,13 @@ __Running the script:__
 * 2) Install Autohotkey 64 or 32 Bits.
 * 3) Copy the Code.
 * 4) Paste it in to notepad or any other text editor you use-
-* * 5) Save it as  `RPG MO - All in One Bot.ahk`
+ * 5) Save it as  `RPG MO - All in One Bot.ahk`
 * 6) Double click the `RPG MO - All in One Bot.ahk` file
 * 7) Now its running, you should see a small icon with a Spade on it in the right corner of the Taskbar/Startbar.
 * 8) Now when its running you should see a GUI/ a window on the screen.
 * 9) Select what option you want to run/bot. 
-* 
+
+
 So now the bot is running :D
 
 
