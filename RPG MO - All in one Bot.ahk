@@ -6,29 +6,8 @@ Autohotkey version: v1.1.23.00
 Tested on: Windows 7 64 Bit Ultimate and Windows 8 32 Bit
 Started working Date: 12/11/2015
  
- This is what you NEED to do for the bot to work!
-((
- 
-How to use:
-You need the Steam version Or Client version/Downlad
-Mods or Keybindings that HAVE to be on/right before starting the bot
- 
-Mods that need to be ON:
-Enhanced Market
-Keybinding Extensions
-Pet Inventory
-Chest Inventory
-Miscellaneous Improvments
- 
-Keybindings:
-E = Deposit All+ in chest
-X = Unload pet inventory
-C = Load pet inventory
- 
-Q =Toggle inventory
-Z = Withdraw 1 or ALL
- 
-Ctrl + Escape = Exit script.
+ For more info:
+ https://github.com/floowsnaake/RPG-MO---All-in-one-Bot
  
 */
  
