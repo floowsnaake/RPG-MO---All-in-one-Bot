@@ -42,15 +42,13 @@ Fullscreen = `Off`
 So after you have setup everything in the game then there are 2 ways of running the bot,ether you run the RPG MO - All in one Bot.exe or you run the source code with Autohtokey.
 (i recommend running the .exe way if you havent used Autohtokey before) 
 
-**Running the script:**
-* 1) Download Autohotkey (http://ahkscript.org/download/ahk-install.exe).
-*2) Install Autohotkey 64 or 32 Bits.
-*3) Copy the Code.
-*4) Paste it in to notepad or any other text editor you use-
-*5) Save it as sand `RPG MO - All in One Bot.ahk`.
-*6) Double click at `RPG MO - All in One Bot.ahk`.
-*7) Now its running, you should see a small icon with a Spade on it in the corner of the Taskbar/Startbar.
-*8) Now when its running you should see a GUI/ a window on the screen.
-*9) Select what option you want to run/bot. 
-
-so now it is all done :D
+__Running the script:__
+1) Download Autohotkey (http://ahkscript.org/download/ahk-install.exe).
+2) Install Autohotkey 64 or 32 Bits.
+3) Copy the Code.
+4) Paste it in to notepad or any other text editor you use-
+5) Save it as  `RPG MO - All in One Bot.ahk`
+6) Double click the `RPG MO - All in One Bot.ahk` file
+7) Now its running, you should see a small icon with a Spade on it in the right corner of the Taskbar/Startbar.
+8) Now when its running you should see a GUI/ a window on the screen.
+9) Select what option you want to run/bot. 
