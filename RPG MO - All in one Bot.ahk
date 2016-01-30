@@ -74,12 +74,26 @@ IF NOT A_IsAdmin
       FileReadLine,Read_GamePath,RPG MO Bot.ini,2
       FileReadLine,Read_StartKey,RPG MO Bot.ini,3
       FileReadLine,Read_HideKey,RPG MO Bot.ini,4
- 
+      FileReadLine,Read_Steam,RPG MO Bot.ini,5
+      
       Hotkey,%Read_StartKey%,Botkey
        Hotkey,%Read_HideKey%,Hidekey
  
       Account = %Read_Acc%
       Game_Path_Dir = %Read_GamePath%
+      
+      IF (Read_Steam = 1)
+      {
+       Original_Title = RPG MO - Early Access
+       Procces = nw.exe
+      }
+      
+      IF (Read_Steam = 0)
+      {
+       Original_Title = RPG MO - Web Browser Game
+       Procces = RPG MO.exe
+      }
+      
    }
  
    IfNOTExist,RPG MO Bot.ini
@@ -96,6 +110,7 @@ IF NOT A_IsAdmin
       Gui, Start: Add, Text, w110 h20,RPG MO Path
       Gui, Start: Add, Edit, w100 h20 vGame_Path,
       Gui, Start: Add, Button,gBrowse,Browse
+      Gui, Start: Add, Checkbox,vSteam,Steam version
       Gui, Start: Add, Button,gsave, Save
  
       Gui, Start: Show,, Settings
@@ -103,7 +118,7 @@ IF NOT A_IsAdmin
  
       save:
       Gui, Start: Submit
-      FileAppend,%Acc%`n%Game%`n%StartKey%`n%HideKey%,RPG MO Bot.ini
+      FileAppend,%Acc%`n%Game%`n%StartKey%`n%HideKey%`n%Steam%,RPG MO Bot.ini
       Reload
       return
  
@@ -150,18 +165,18 @@ Wood:
  Wood = 1 
  Gui, Select: Submit
  
-Process, Exist, RPG MO.exe
+Process, Exist, %Procces%
 IF !errorlevel=1
 {
 Run, %Game_Path_Dir%
 }
  
-WinWait,RPG MO - Web Browser Game
-WinMove,RPG MO - Web Browser Game,,,,906,705
-WinSet, Style, -0x30000,RPG MO - Web Browser Game
+WinWait,%Original_Title%
+WinMove,%Original_Title%,,,,906,705
+WinSet, Style, -0x30000,%Original_Title%
  
 Game_Title = WoodCutting Bot
-WinSetTitle,RPG MO - Web Browser Game,,%Game_Title%
+WinSetTitle,%Original_Title%,,%Game_Title%
 Sleep, 500
 WinActivate,%Game_Title%
 WinWaitActive,%Game_Title%
@@ -203,18 +218,18 @@ Sand = 1
 Tree_type2 = sand
   Gui, Select: Submit 
  
-Process, Exist, RPG MO.exe
+Process, Exist, %Procces%
 IF !errorlevel=1
 {
 Run, %Game_Path_Dir%
 }
  
-WinWait,RPG MO - Web Browser Game
-WinMove,RPG MO - Web Browser Game,,,,906,705
-WinSet, Style, -0x30000,RPG MO - Web Browser Game
+WinWait,%Original_Title%
+WinMove,%Original_Title%,,,,906,705
+WinSet, Style, -0x30000,%Original_Title%
  
 Game_Title = Digging Bot
-WinSetTitle,RPG MO - Web Browser Game,,%Game_Title%
+WinSetTitle,%Original_Title%,,%Game_Title%
 Sleep, 500
 WinActivate,%Game_Title%
 WinWaitActive,%Game_Title%
@@ -254,18 +269,18 @@ fish:
 Tree_type2 = Fish
  Gui, Select: Submit
  
-Process, Exist, RPG MO.exe
+Process, Exist, %Procces%
 IF !errorlevel=1
 {
 Run, %Game_Path_Dir%
 }
  
-WinWait,RPG MO - Web Browser Game
-WinMove,RPG MO - Web Browser Game,,,,906,705
-WinSet, Style, -0x30000,RPG MO - Web Browser Game
+WinWait,%Original_Title%
+WinMove,%Original_Title%,,,,906,705
+WinSet, Style, -0x30000,%Original_Title%
  
 Game_Title = Fishing Bot
-WinSetTitle,RPG MO - Web Browser Game,,%Game_Title%
+WinSetTitle,%Original_Title%,,%Game_Title%
 Sleep, 500
 WinActivate,%Game_Title%
 WinWaitActive,%Game_Title%
@@ -301,18 +316,18 @@ mine:
 Tree_type2 = mine
  Gui, Select: Submit
  
-Process, Exist, RPG MO.exe
+Process, Exist, %Procces%
 IF !errorlevel=1
 {
 Run, %Game_Path_Dir%
 }
  
-WinWait,RPG MO - Web Browser Game
-WinMove,RPG MO - Web Browser Game,,,,906,705
-WinSet, Style, -0x30000,RPG MO - Web Browser Game
+WinWait,%Original_Title%
+WinMove,%Original_Title%,,,,906,705
+WinSet, Style, -0x30000,%Original_Title%
  
 Game_Title = Mining Bot
-WinSetTitle,RPG MO - Web Browser Game,,%Game_Title%
+WinSetTitle,%Original_Title%,,%Game_Title%
 Sleep, 500
 WinActivate,%Game_Title%
 WinWaitActive,%Game_Title%
@@ -360,8 +375,8 @@ XP = 0
 loops = 0
 runs = 0
 
-WinSetTitle,%Game_Title%,,RPG MO - Web Browser Game
-WinMove,RPG MO - Web Browser Game,,,,906,539
+WinSetTitle,%Game_Title%,,%Original_Title%
+WinMove,%Original_Title%,,,,906,539
  
 Gui, Select:Destroy
 Gui, 1:Destroy
@@ -477,7 +492,7 @@ GuiControl, Enable, Debug_Mod
 GuiControl, Enable, Fish_Location
 GuiControl, Enable, mine_location
  
- }
+}
 return
  
 Selling(Funcy_Price){
@@ -527,7 +542,7 @@ IF (Wood = 1)
 LV_Modify(1,,,, Tree_type2 " wood sold in the market for: " Funcy_Price ) 
 }
  
-IF (Wood = 1)
+IF (Sand = 1)
 {
 LV_Modify(1,,,, "Sand sold in the market for: " Funcy_Price ) 
 }
@@ -575,13 +590,13 @@ IF (Wood = 1)
    LV_Modify(1,,,,"Going to " Tree_type2 " tree")  
    Sleep, 400
  
-       IF (Tree_type2 = "Cactus")
-      {
-       K("Down","7")
-      K("Right","1")
-      K("Down","13")
-      K("Left","8")
-      }
+   IF (Tree_type2 = "Cactus")
+  {
+   K("Down","7")
+   K("Right","1")
+   K("Down","13")
+   K("Left","8")
+  }
  
    IF (Tree_type2 = "Maple")
   { 
@@ -832,16 +847,16 @@ hid++
  
 IF (hid = 1)
 {
-WinSetTitle,%Game_Title%,,RPG MO - Web Browser Game
-WinMove,RPG MO - Web Browser Game,,,,906,539
-WinActivate,RPG MO - Web Browser Game
-WinWaitActive,RPG MO - Web Browser Game
+WinSetTitle,%Game_Title%,,%Original_Title%
+WinMove,%Original_Title%,,,,906,539
+WinActivate,%Original_Title%
+WinWaitActive,%Original_Title%
 }
  
 IF (hid = 2)
 {
 hid = 0
-WinSetTitle,RPG MO - Web Browser Game,,%Game_Title%
+WinSetTitle,%Original_Title%,,%Game_Title%
 WinMove,%Game_Title%,,,,906,705
 SetParentByClass("Chrome_WidgetWin_0", 1)
 WinActivate,%Game_Title%
@@ -856,7 +871,8 @@ ExitApp
 return
  
 Quit:
-WinSetTitle,%Game_Title%,,RPG MO - Web Browser Game
+WinSetTitle,%Game_Title%,,%Original_Title%
+WinMove,%Original_Title%,,,,906,539
 send, {Up Up}
 send, {Down Up}
 send, {Right Up}
