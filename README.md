@@ -10,8 +10,9 @@ Prewiew of the bot running:
 
 So this is what you need to do to be able to run the bot.
 
-First of You need Client version of the game not the browser version:
+First of You need Client version of the game or the steam version not the browser version:
  [Link to Client](http://mo.ee/download.html)
+ [Link to Steam Client](http://store.steampowered.com/app/372800/)
 
 also you need to Enable some Mods in the game and change some keybinding before you start the bot.
 Mods that needs to be ON:
