@@ -59,3 +59,12 @@ __Running the script:__
 So now the bot is running :D
 
 
+
+
+
+
+
+
+
+tags:
+rpg mo,rpg mo bot,rpg mo hack,rpgmo,rpgmobotp,rpgmohack,freerpgmo­,wood rpg mo,papa digger,papa rpg mo,rpg mo papa,papa rpg mo bot,bot rpg mo,mo rpg bot,ahk rpg mo,rpg mo autohotkey,rpg mo script,rpg mo babysit,rpg mo floowsnaake,rpg mo floowsnaake bot, rpg mo flow snake,rpg mo floow snaake,rpg mo hacking bot,rpg mo free,rpg mo exp hack,autoit rpg mo,rpg mo auto,rpg mo macro,rpg mo clicker,rpg mo clicking,rpg mo capatcha bot,rpg mo github,rpg mo steam,rpg mo steam bot,rpg mo steam hacker,rpg mo 2016,rpg mo 2017,rpg mo 2x exp bot,rpg bot bot hack,hacking rpg,rpg bot,bots rpgs,hacks rpgs,bot witu autohtokey,how to make a rpg mo bot,how to make a bot,bot prewieew,pewdiepew rpg mo,sexy rpg mosnowflake rpg mo
