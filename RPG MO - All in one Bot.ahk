@@ -1,14 +1,28 @@
 /* 
- 
+
 Script name: RPG MO - All in One Bot
 Made by: FloowSnaake
 Autohotkey version: v1.1.23.00
 Tested on: Windows 7 64 Bit Ultimate and Windows 8 32 Bit
 Started working Date: 12/11/2015
  
- For more info:
- https://github.com/floowsnaake/RPG-MO---All-in-one-Bot
+For more info:
+https://github.com/floowsnaake/RPG-MO---All-in-one-Bot
  
+ bugs list:
+ (x) 1. The url under the youtubevideo links to the wrong github page
+ (x) 2. In the i.imgur file you posted in the ahk Forum is your ingame username still visible. 
+
+3. Sometimes the character moves a bit strange and messes the whole pattern up, but maybe (probably) I have clicked somewhere and am at fault here.
+
+3.5. It is intended that I need to click the “start bot” button every time my inventory is full? Haven’t seen an automated return process in your code and I do not know if it is even possible for the script to detect if the inventory is full.
+4. When you start the script it attaches itself to the client, but hides the bottom (where the start/stop button etc are), if you rescale the client you can't click on the gui anymore.
+5. Your script counts for every run 39 slots for full inventory, but if you have a pet it’s 38 slots + pet inventory
+6. Maybe uncheck the announce trade
+7. You should mention the start-coordinates somewhere or start at the chest (would not work if 3.5 is true)
+8. Selling is done through clicks? However as long as the start position of the mouse is not correct the clicks are futile (need the materials for the other skills anyway and selling it on the market manual is no big deal so it doesn’t matter that much to me)
+9. Do you prefer the feedback here or on any other side??
+
 */
  
 IF NOT A_IsAdmin
@@ -75,6 +89,8 @@ IF NOT A_IsAdmin
       FileReadLine,Read_StartKey,RPG MO Bot.ini,3
       FileReadLine,Read_HideKey,RPG MO Bot.ini,4
       FileReadLine,Read_Steam,RPG MO Bot.ini,5
+      FileReadLine,Read_Key_Movment,RPG MO Bot.ini,6
+      FileReadLine,Read_Click_Movment,RPG MO Bot.ini,7
       
       Hotkey,%Read_StartKey%,Botkey
        Hotkey,%Read_HideKey%,Hidekey
@@ -111,6 +127,9 @@ IF NOT A_IsAdmin
       Gui, Start: Add, Edit, w100 h20 vGame_Path,
       Gui, Start: Add, Button,gBrowse,Browse
       Gui, Start: Add, Checkbox,vSteam,Steam version
+      Gui, Start: Add, Text, w110 h20,Movment Style:
+      Gui, Start: Add, Radio, Checked vKey_Movment,Key
+      Gui, Start: Add, Radio, vClick_Movment,Click
       Gui, Start: Add, Button,gsave, Save
  
       Gui, Start: Show,, Settings
@@ -118,7 +137,7 @@ IF NOT A_IsAdmin
  
       save:
       Gui, Start: Submit
-      FileAppend,%Acc%`n%Game%`n%StartKey%`n%HideKey%`n%Steam%,RPG MO Bot.ini
+      FileAppend,%Acc%`n%Game%`n%StartKey%`n%HideKey%`n%Steam%`n%Key_Movment%`n%Click_Movment%,RPG MO Bot.ini
       Reload
       return
  
@@ -143,6 +162,8 @@ Gui, Select: Add,Button,gsand,Sand Digging (Revel)
 Gui, Select: Add,Button,gwood,Woodcutting
 Gui, Select: Add,Button,gfish,Fishing
 Gui, Select: Add,Button,vmin gmine,Mining
+ 
+ Gui, Select: Add,Button,gSettings,Settings
  
 GuiControl, Select:Disable,min
  
@@ -310,7 +331,7 @@ WinActivate,%Game_Title%
 }
 return
  
-mine:
+ mine:
 {
  mine = 1 
 Tree_type2 = mine
@@ -362,6 +383,9 @@ return
 GuiClose:
 ExitApp
  
+Settings:
+run, notepad "RPG MO Bot.ini"
+return
 
 Menu:
 Wood = 0
