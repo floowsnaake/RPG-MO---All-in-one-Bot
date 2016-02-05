@@ -32,7 +32,7 @@ IF NOT A_IsAdmin
 }
  
 ;   #SingleInstance force
-   SetWorkingDir, %A_ScriptDir%
+   SetWorkingDir, %A_ScriptDir%/Scripts
  
  
    CoordMode, Mouse, client
@@ -164,7 +164,8 @@ Gui, Select: Add,Button,gfish,Fishing
 Gui, Select: Add,Button,vmin gmine,Mining
  
  Gui, Select: Add,Button,gSettings,Settings
- 
+  Gui, Select: Add,Button,gSFolder,Scripts Folder
+  
 GuiControl, Select:Disable,min
  
 ;Gui, Select: Add,Button,H30,Farming
@@ -383,6 +384,9 @@ return
 GuiClose:
 ExitApp
  
+SFolder:
+ run, explore %A_ScriptDir%/Scripts
+ return
 Settings:
 run, notepad "RPG MO Bot.ini"
 return
@@ -589,9 +593,8 @@ LV_Modify(1,,,,"Going back fishing")
  
 IF (Fish_Location2 = "Dorpat")
 {
-K("down","3")
-K("Left","5")
-K("Down","6")
+FileReadLine,Fish_Back,FishingDorpat.rmb,2
+K(Fish_Back)
  }
  
 }
@@ -599,13 +602,8 @@ K("Down","6")
 IF (Sand = 1)
 {
 LV_Modify(1,,,,"Going to Sand")  
-Sleep, 400
-K("Down","7")
-K("Right","1")
-K("Down","8")
-K("Left","7")
-K("Up","17")
-K("Left","1")
+FileReadLine,Sand_Back,DiggerReval.rmb,2
+K(Sand_Back)
 }
  
 IF (Wood = 1)
@@ -614,24 +612,18 @@ IF (Wood = 1)
    LV_Modify(1,,,,"Going to " Tree_type2 " tree")  
    Sleep, 400
  
-   IF (Tree_type2 = "Cactus")
-  {
-   K("Down","7")
-   K("Right","1")
-   K("Down","13")
-   K("Left","8")
+IF (Tree_type2 = "Cactus")
+{
+FileReadLine,Cactus_Back,Cactus.rmb,2
+K(Cactus_Back)
   }
  
-   IF (Tree_type2 = "Maple")
-  { 
-   K("Down","7")
-   K("Right","1")
-   K("Down","10")
-   K("Right","50")
-   K("Up","10")
-   K("Right","2")
-   K("Up","8")
+IF (Tree_type2 = "Maple")
+{ 
+FileReadLine,Maple_Back,Maple.rmb,2
+K(Maple_Back)
 }
+
 }
  
 IF (Wood = 1)
@@ -728,24 +720,14 @@ IF (Wood = 1)
 {
     IF (Tree_type2 = "Maple")
    {
-     K("Down","7")
-     K("Left","2")
-     K("Down","3")
-     K("Left","50")
-     K("Up","10")
-     K("Left","1")
-     K("Up","7")
-     K("Left","2")
-     Sleep, 300
+FileReadLine,Maple_Back,Maple.rmb,1
+K(Maple_Back)
+Sleep, 300
    }
  
     IF (Tree_type2 = "Cactus")
    {
-   K("Right","5")
-   K("Up","13")
-   K("Left","1")
-   K("Up","7")
-   K("Left","2")
+
    Sleep, 300
 }
 }
@@ -755,10 +737,7 @@ IF (fish = 1)
  
 IF (Fish_Location2 = "Dorpat")
 {
-K("Up","5")
-K("Right","5")
-K("Up","3")
-K("Right","2")
+
 Sleep, 300
 }
  
@@ -766,12 +745,8 @@ Sleep, 300
  
 IF (Sand = 1)
 {
-K("Down","17")
-K("Right","7")
-K("Up","8")
-K("Left","1")
-K("Up","7")
-K("Left","2")
+FileReadLine,Sand_Stash,DiggerReval.rmb,1
+K(Sand_Stash)
 Sleep, 300
 }
 }
@@ -824,7 +799,7 @@ Anounces(message){
    Sleep, 700
    send, {Enter}
    Sleep, 3000
-   K("Up","3")
+   K("Up|3")
    Sleep, 3000
    SendRaw,%message%
    Sleep, 4000
@@ -845,23 +820,19 @@ C(clc,x,y){
 return
  
  
-K(key,times){
-   Loop, %times%
-   {
-      Random,Sleepy,230,240
- 
-      IF (Debug_Mod = 1)
-      {
-         ToolTip,Walking: %key% Steps: %A_index% /  %times% /  %total%,0,0
-      } 
- 
-      Send,{%key% Down}
-      Sleep, %Sleepy%
-      Send,{%key% Up}
-      Sleep, 200
-      total++
-   }
-   Sleep, 100
+K(multipleKeyTimes){
+    Loop, Parse, multipleKeyTimes,`,
+    {
+        keyOrTimes:=StrSplit(A_LoopField,"|")
+        Loop % keyOrTimes[2] {
+            Random, Sleepy, 230, 240
+            Send, % "{" keyOrTimes[1]" Down}"
+            Sleep, % Sleepy
+            Send, % "{" keyOrTimes[1]" Up}"
+            Sleep 200
+        }
+        Sleep, 100
+    }
 }
 return
  
