@@ -1,0 +1,10 @@
+How to make your own Script/How the script works:
+
+Fir = Selling type/material
+5 = Exp per item/thing
+Left 3,Down 10,Right 2 = The walking path to the Stash/chest.
+405 231 = Opens the Stash/chest if it doesn't open by walking to it
+Left 1,Up 10,Right 4 =  The walking path back to the place you were before.
+Skill:|Woodcutting||Location/Coordinates:|Dorpat (23,27)||Requirements:|Woodcutters Axe = Information how to use the script. | = new line
+
+line 8 is the info of the script so you will know how to use it/what you need to have/what level you need to be and also the location and coordinates you need to stand on when you start the bot.
