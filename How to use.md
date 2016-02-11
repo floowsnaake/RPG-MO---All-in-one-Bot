@@ -6,6 +6,8 @@ It is a bot for the game RPG MO that can train skills such as Woodcutting,fishin
 Prewiew of the bot running:
 [Youtube Video](https://www.youtube.com/watch?v=tMCopyi8ynk)
 
+
+
 **Setting up the bot**
 
 So this is what you need to do to be able to run the bot.
@@ -19,6 +21,8 @@ also you need to Enable some Mods in the game and change some keybinding before 
 Mods that needs to be ON:
 
 Enhanced Market,Keybinding Extensions,Pet Inventory,Chest Inventory and Miscellaneous Improvements
+
+
 
 Keybindings:
 
@@ -58,9 +62,7 @@ __Running the script:__
 
 So now the bot is running :D
 
-
-
-
+    
 
 
 
