@@ -1,119 +1,65 @@
-/* 
-
+/*
 Script name: RPG MO - All in One Bot
 Made by: FloowSnaake
-Autohotkey version: v1.1.23.00
+Autohotkey version: v1.1.23.01
 Tested on: Windows 7 64 Bit Ultimate and Windows 8 32 Bit
 Started working Date: 12/11/2015
- 
+Latest Build: 11/2/2016
+
 For more info:
 https://github.com/floowsnaake/RPG-MO---All-in-one-Bot
  
  bugs list:
- (x) 1. The url under the youtubevideo links to the wrong github page
- (x) 2. In the i.imgur file you posted in the ahk Forum is your ingame username still visible. 
-
-3. Sometimes the character moves a bit strange and messes the whole pattern up, but maybe (probably) I have clicked somewhere and am at fault here.
-
-3.5. It is intended that I need to click the “start bot” button every time my inventory is full? Haven’t seen an automated return process in your code and I do not know if it is even possible for the script to detect if the inventory is full.
-4. When you start the script it attaches itself to the client, but hides the bottom (where the start/stop button etc are), if you rescale the client you can't click on the gui anymore.
-5. Your script counts for every run 39 slots for full inventory, but if you have a pet it’s 38 slots + pet inventory
-6. Maybe uncheck the announce trade
 7. You should mention the start-coordinates somewhere or start at the chest (would not work if 3.5 is true)
-8. Selling is done through clicks? However as long as the start position of the mouse is not correct the clicks are futile (need the materials for the other skills anyway and selling it on the market manual is no big deal so it doesn’t matter that much to me)
-9. Do you prefer the feedback here or on any other side??
 
+
+How the Scripts work
+```
+Fir = Selling type/material
+5 = Exp per item/thing
+Left 3,Down 10,Right 2 = Stash Walking Path
+405 231 = Open Chest/chest Location
+Left 1,Up 10,Right 4 = Going Back Walking Path
+Skill:|Woodcutting||Location/Coordinates:|Dorpat (23,27)||Requirements:|Woodcutters Axe = Information how to use the script. | = new line
+```
 */
- 
-IF NOT A_IsAdmin
-{
-   Run *RunAs "%A_ScriptFullPath%"
-   ExitApp
-}
- 
-;   #SingleInstance force
-   SetWorkingDir, %A_ScriptDir%/Scripts
- 
- 
-   CoordMode, Mouse, client
-   CoordMode, Pixel, client
-   CoordMode, Tooltip, client
- 
-   DetectHiddenText, On
-   OnExit, Quit
- 
-    Blank =
-    hid = 0
-    Wood = 0
-    Sand = 0
-    Fish = 0
-    Cook = 0
-   mine = 0
-   
-   Global hid
-   Global price
-   Global Funcy_Price
-   Global Checkt
-   Global Petbox
-   Global Debug_Mod
-   Global Alarm
-   Global Drop_Crystal
-   Global SandC 
-   Global SandS
-   Global total
-   Global loops
-   Global XP
-   Global Selling_time
-   Global loops
-   Global Fast
-   Global Normal
-   Global Slow
-   Global Anounce_Sell
-   Global Runs
-   Global Account
-   Global Blank
-   Global Game_Path_Dir
-   Global Tree_type
-   Global Tree_type2
-   Global Sand
-   Global Wood
-   Global Fish
-   Global Cook
-   GLobal Fight
-   Global mine
-   
-   IfExist,RPG MO Bot.ini
+
+#SingleInstance Force
+OnExit, Quit
+SetWorkingDir, %A_ScriptDir%/Scripts
+
+CoordMode, Mouse, Client
+CoordMode, Pixel, Client
+CoordMode, ToolTip, Client
+
+   IfExist,RPG MO Bot2.ini
    {
-      FileReadLine,Read_Acc,RPG MO Bot.ini,1
-      FileReadLine,Read_GamePath,RPG MO Bot.ini,2
-      FileReadLine,Read_StartKey,RPG MO Bot.ini,3
-      FileReadLine,Read_HideKey,RPG MO Bot.ini,4
-      FileReadLine,Read_Steam,RPG MO Bot.ini,5
-      FileReadLine,Read_Key_Movment,RPG MO Bot.ini,6
-      FileReadLine,Read_Click_Movment,RPG MO Bot.ini,7
+      FileReadLine,Read_Acc,RPG MO Bot2.ini,1
+      FileReadLine,Read_StartKey,RPG MO Bot2.ini,2
+      FileReadLine,Read_HideKey,RPG MO Bot2.ini,3
+      FileReadLine,Read_Steam,RPG MO Bot2.ini,4
       
       Hotkey,%Read_StartKey%,Botkey
-       Hotkey,%Read_HideKey%,Hidekey
- 
+      Hotkey,%Read_HideKey%,Hidekey
+       
       Account = %Read_Acc%
-      Game_Path_Dir = %Read_GamePath%
       
       IF (Read_Steam = 1)
       {
-       Original_Title = RPG MO - Early Access
+       Game_Title = RPG MO - Early Access
        Procces = nw.exe
       }
       
       IF (Read_Steam = 0)
       {
-       Original_Title = RPG MO - Web Browser Game
+       Game_Title = RPG MO - Web Browser Game
        Procces = RPG MO.exe
       }
       
    }
  
-   IfNOTExist,RPG MO Bot.ini
-   {
+IfNOTExist,RPG MO Bot2.ini
+{
       Gui, Start: Add, Text, w110 h20,Account
       Gui, Start: Add, Edit, w100 h20 vAcc, Account name
  
@@ -122,736 +68,226 @@ IF NOT A_IsAdmin
  
       Gui, Start: Add, Text, w110 h20 ,Bot Hide Hotkey:
       Gui, Start: Add, Hotkey, w70 h20 vHideKey,F1
- 
-      Gui, Start: Add, Text, w110 h20,RPG MO Path
-      Gui, Start: Add, Edit, w100 h20 vGame_Path,
-      Gui, Start: Add, Button,gBrowse,Browse
+
       Gui, Start: Add, Checkbox,vSteam,Steam version
-      Gui, Start: Add, Text, w110 h20,Movment Style:
-      Gui, Start: Add, Radio, Checked vKey_Movment,Key
-      Gui, Start: Add, Radio, vClick_Movment,Click
       Gui, Start: Add, Button,gsave, Save
  
-      Gui, Start: Show,, Settings
+      Gui, Start: Show,w160, Settings
       return
  
       save:
       Gui, Start: Submit
-      FileAppend,%Acc%`n%Game%`n%StartKey%`n%HideKey%`n%Steam%`n%Key_Movment%`n%Click_Movment%,RPG MO Bot.ini
-      Reload
+      FileAppend,%Acc%`n%StartKey%`n%HideKey%`n%Steam%,RPG MO Bot2.ini
+     Reload
       return
- 
-      Browse:
-      FileSelectFile, Game, 3, , Select RPG MO exe, RPG MO Client (*.exe)
-      if Game =
-      MsgBox,You user didn't select the game!
-      else
-         GuiControl,,Game_Path,%Game%
-      return
-   }
- 
-Menu_Screen:
-Gui, Select: +AlwaysOnTop
- 
-;Gui, Select: Add,Text,,Combat skills
-;Gui, Select: Add,Button,H30,Auto Fight
-;Gui, Select: Add,Button,H30,Auto Fight (Magic)
- 
-Gui, Select: Add,Text,ym,Bot Menu
-Gui, Select: Add,Button,gsand,Sand Digging (Revel)
-Gui, Select: Add,Button,gwood,Woodcutting
-Gui, Select: Add,Button,gfish,Fishing
-Gui, Select: Add,Button,vmin gmine,Mining
- 
- Gui, Select: Add,Button,gSettings,Settings
-  Gui, Select: Add,Button,gSFolder,Scripts Folder
-  
-GuiControl, Select:Disable,min
- 
-;Gui, Select: Add,Button,H30,Farming
- 
-;Gui, Select: Add,Text,ym,Crafting skills
-;Gui, Select: Add,Button,H30,Forging
-;Gui, Select: Add,Button,H30,Jewelry
-;Gui, Select: Add,Button,H30,Carpentry
-;Gui, Select: Add,Button,H30,Cooking
-;Gui, Select: Add,Button,H30,Alchemy
-;Gui, Select: Add,Button,H30,Fighting
-;Gui, Select: Add,Button,H30,Breeding
- 
-Gui,Select: Show, W140 ,Bot Script select Menu
-return
- 
-Wood:
-{
- Wood = 1 
- Gui, Select: Submit
- 
+}
+
 Process, Exist, %Procces%
 IF !errorlevel=1
 {
-Run, %Game_Path_Dir%
-}
- 
-WinWait,%Original_Title%
-WinMove,%Original_Title%,,,,906,705
-WinSet, Style, -0x30000,%Original_Title%
- 
-Game_Title = WoodCutting Bot
-WinSetTitle,%Original_Title%,,%Game_Title%
-Sleep, 500
-WinActivate,%Game_Title%
-WinWaitActive,%Game_Title%
- 
-Gui, 1:New, +LastFound -Caption +AlwaysOnTop
-Gui, Margin, 0, 0
- 
-Gui Add, Text, x10 y6 w52 h13 , Tree Type:
-Gui Add, DropDownList, x8 y24 w120 vTree_type, Fir|Cactus|Oak|Willow|Maple|Spirit|Blue Palm|Magic Oak
-Gui Add, CheckBox, x224 y24 w90 h20 vDebug_Mod, Debug Mode
-Gui Add, CheckBox, x144 y24 w70 h20 vPetbox, Have Pet
-Gui Add, CheckBox, x328 y24 w110 h20 vDrop_Crystal, Alarm on Capatcha
-Gui Add, Text, x448 y24 w110 h20 , Wood Sell Price:
-Gui Add, Edit, x528 y24 w30 h20 vprice, 200
-Gui Add, Text, x752 y24 w99 h20 , Sell Wood every run:
-Gui Add, Edit, x856 y24 w30 h20 vSelling_time, 20
-Gui Add, CheckBox, x568 y24 w170 h20 Checked  vAnounce_Sell, Announce selling in Trade Chat
-Gui, Add, ListView,grid  x8 y56 w850 h62 ,Account|Runs|Status|Wood Cut|Profit|XP Gained
- 
-LV_ModifyCol(1, 100) , LV_ModifyCol(2, 40) , LV_ModifyCol(3, 255) , LV_ModifyCol(4, 85) , LV_ModifyCol(5, 70) , LV_ModifyCol(6,80), LV_Add(1,"","","","","",""), LV_Modify(1,,Account,0,"Not Started",0,0,0)
- 
-Gui Add, Button, x8 y136 w90 h23 gStart_Bot, Start/Stop
-Gui Add, Button, x130 y136 w90 h23 gMenu, Script Menu
- 
-Gui Add, Link, x226 y136 w71 h13, <a href="https://autohotkey.com/boards/viewtopic.php?f=19&t=13323">Bot Homepage</a>
- 
-Gui Add, Link, x416 y136 w100 h13, <a href="http://rpg-mo.wikia.com/wiki/Woodcutting">Woodcutting Wiki</a>
- 
-GuiControl,Choose,Tree_type,Fir
-SetParentByClass("Chrome_WidgetWin_0", 1)
-Gui Show, x0 y500 w967 h172, 1
-WinActivate,%Game_Title%
-}
-return
- 
-Sand:
-{
-Sand = 1
-Tree_type2 = sand
-  Gui, Select: Submit 
- 
-Process, Exist, %Procces%
-IF !errorlevel=1
-{
-Run, %Game_Path_Dir%
-}
- 
-WinWait,%Original_Title%
-WinMove,%Original_Title%,,,,906,705
-WinSet, Style, -0x30000,%Original_Title%
- 
-Game_Title = Digging Bot
-WinSetTitle,%Original_Title%,,%Game_Title%
-Sleep, 500
-WinActivate,%Game_Title%
-WinWaitActive,%Game_Title%
- 
-Gui, 1:New, +LastFound -Caption +AlwaysOnTop
-Gui, Margin, 0, 0
- 
-Gui Add, CheckBox, x8 y24 w90 h20 vDebug_Mod, Debug Mode
-Gui Add, CheckBox, x224 y24 w70 h20 vPetbox, Have Pet
-Gui Add, CheckBox, x328 y24 w110 h20 vDrop_Crystal, Alarm on Capatcha
-Gui Add, Text, x448 y24 w110 h20 , Sand Sell Price:
-Gui Add, Edit, x528 y24 w30 h20 vprice, 200
-Gui Add, Text, x752 y24 w99 h20 , Sell Sand every run:
-Gui Add, Edit, x856 y24 w30 h20 vSelling_time, 20
-Gui Add, CheckBox, x568 y24 w170 h20 Checked  vAnounce_Sell, Announce selling in Trade Chat
-Gui, Add, ListView,grid  x8 y56 w850 h62 ,Account|Runs|Status|Sand Dug|Profit|XP Gained
- 
-LV_ModifyCol(1, 100) , LV_ModifyCol(2, 40) , LV_ModifyCol(3, 255) , LV_ModifyCol(4, 85) , LV_ModifyCol(5, 70) , LV_ModifyCol(6,80), LV_Add(1,"","","","","",""), LV_Modify(1,,Account,0,"Not Started",0,0,0)
- 
-Gui Add, Button, x130 y136 w90 h23 gMenu, Script Menu
-Gui Add, Button, x8 y136 w90 h23 gStart_Bot, Start/Stop
- 
-Gui Add, Link, x226 y136 w71 h13, <a href="https://autohotkey.com/boards/viewtopic.php?f=19&t=13323">Bot Homepage</a>
- 
-Gui Add, Link, x416 y136 w100 h13, <a href="http://rpg-mo.wikia.com/wiki/Sand">Sand Wiki</a>
- 
-SetParentByClass("Chrome_WidgetWin_0", 1)
-Gui Show, x0 y500 w967 h172, 1
-WinActivate,%Game_Title%
-}
-return
- 
- 
-fish:
-{
- Fish = 1 
-Tree_type2 = Fish
- Gui, Select: Submit
- 
-Process, Exist, %Procces%
-IF !errorlevel=1
-{
-Run, %Game_Path_Dir%
-}
- 
-WinWait,%Original_Title%
-WinMove,%Original_Title%,,,,906,705
-WinSet, Style, -0x30000,%Original_Title%
- 
-Game_Title = Fishing Bot
-WinSetTitle,%Original_Title%,,%Game_Title%
-Sleep, 500
-WinActivate,%Game_Title%
-WinWaitActive,%Game_Title%
- 
-Gui, 1:New, +LastFound -Caption +AlwaysOnTop
-Gui, Margin, 0, 0
- 
-Gui Add, Text, x10 y6 w52 h13 , Fishing Place:
-Gui Add, DropDownList, x8 y24 w120 vFish_Location, Dorpat ; |Reval|Rakblood|Narwa
-Gui Add, CheckBox, x224 y24 w90 h20 vDebug_Mod, Debug Mode
-Gui Add, CheckBox, x144 y24 w70 h20 vPetbox, Have Pet
-Gui, Add, ListView,grid  x8 y56 w850 h62 ,Account|Runs|Status|Fish Catched
- 
-LV_ModifyCol(1, 100) , LV_ModifyCol(2, 40) , LV_ModifyCol(3, 255) , LV_ModifyCol(4, 85) , LV_ModifyCol(5, 70) , LV_ModifyCol(6,80), LV_Add(1,"","","","","",""), LV_Modify(1,,Account,0,"Not Started",0,0,0)
- 
-Gui Add, Button, x8 y136 w90 h23 gStart_Bot, Start/Stop
-Gui Add, Button, x130 y136 w90 h23 gMenu, Script Menu
- 
-Gui Add, Link, x226 y136 w71 h13, <a href="https://autohotkey.com/boards/viewtopic.php?f=19&t=13323">Bot Homepage</a>
- 
-Gui Add, Link, x416 y136 w100 h13, <a href="http://rpg-mo.wikia.com/wiki/Fishing">Fishing Wiki</a>
- 
-GuiControl,Choose,Fish_Location,Dorpat
-SetParentByClass("Chrome_WidgetWin_0", 1)
-Gui Show, x0 y500 w967 h172, 1
-WinActivate,%Game_Title%
-}
-return
- 
- mine:
-{
- mine = 1 
-Tree_type2 = mine
- Gui, Select: Submit
- 
-Process, Exist, %Procces%
-IF !errorlevel=1
-{
-Run, %Game_Path_Dir%
-}
- 
-WinWait,%Original_Title%
-WinMove,%Original_Title%,,,,906,705
-WinSet, Style, -0x30000,%Original_Title%
- 
-Game_Title = Mining Bot
-WinSetTitle,%Original_Title%,,%Game_Title%
-Sleep, 500
-WinActivate,%Game_Title%
-WinWaitActive,%Game_Title%
- 
-Gui, 1:New, +LastFound -Caption +AlwaysOnTop
-Gui, Margin, 0, 0
- 
-Gui Add, Text, x10 y6 w52 h13 , Mining Place:
-Gui Add, DropDownList, x8 y24 w120 vmine_Location, Dorpat|Reval|Rakblood|Narwa
-Gui Add, CheckBox, x224 y24 w90 h20 vDebug_Mod, Debug Mode
-Gui Add, CheckBox, x144 y24 w70 h20 vPetbox, Have Pet
-Gui, Add, ListView,grid  x8 y56 w850 h62 ,Account|Runs|Status|Ore Mined
- 
-LV_ModifyCol(1, 100) , LV_ModifyCol(2, 40) , LV_ModifyCol(3, 255) , LV_ModifyCol(4, 85) , LV_ModifyCol(5, 70) , LV_ModifyCol(6,80), LV_Add(1,"","","","","",""), LV_Modify(1,,Account,0,"Not Started",0,0,0)
- 
-Gui Add, Button, x8 y136 w90 h23 gStart_Bot, Start/Stop
-Gui Add, Button, x130 y136 w90 h23 gMenu, Script Menu
- 
-Gui Add, Link, x226 y136 w71 h13, <a href="https://autohotkey.com/boards/viewtopic.php?f=19&t=13323">Bot Homepage</a>
- 
-Gui Add, Link, x416 y136 w100 h13, <a href="http://rpg-mo.wikia.com/wiki/Mining">Mining Wiki</a>
- 
-GuiControl,Choose,Fish_Location,Dorpat
-SetParentByClass("Chrome_WidgetWin_0", 1)
-Gui Show, x0 y500 w967 h172, 1
-WinActivate,%Game_Title%
-}
-return
- 
- StartGuiClose:
- SelectGuiClose:
-GuiClose:
+MsgBox, Start the RPG MO Client and login then start the bot
 ExitApp
- 
-SFolder:
- run, explore %A_ScriptDir%/Scripts
- return
-Settings:
-run, notepad "RPG MO Bot.ini"
-return
-
-Menu:
-Wood = 0
-Sand = 0
-Fish = 0
-Fight = 0
-mine = 0
-
-Full_INV = 0
-XP = 0
-loops = 0
-runs = 0
-
-WinSetTitle,%Game_Title%,,%Original_Title%
-WinMove,%Original_Title%,,,,906,539
- 
-Gui, Select:Destroy
-Gui, 1:Destroy
-Gui Destroy
-Gosub, Menu_Screen
-return
- 
- 
-BotKey:
-Start_Bot:
-Gui, Submit ,NoHide
- 
-IF (Wood = 1)
-{
-GuiControlGet, Tree_type2,, Tree_type 
 }
- 
-IF (mine = 1)
+
+Select_Again:
+FileSelectFile, Script, 3,%a_workingdir%,Load a script, Script (*.path)
+IF Script =
 {
-GuiControlGet, mine_Location2,, mine_Location
-}
- 
-IF (fish = 1)
-{
-GuiControlGet,Fish_Location2,,Fish_Location
-}
- 
-WinActivate,%Game_Title%
-WinWaitActive, %Game_Title%
+MsgBox, You didn't select a script
 Sleep, 200
- 
-LV_Modify(1,,,,"Bot Started")
- 
-Gui, Submit ,NoHide
- 
-GuiControl, Disable, Start RPG MO
-GuiControl, Disable, Start Bot
-GuiControl, Disable, Walk_Speed
-GuiControl, Disable, price
-GuiControl, Disable, PetBox
-GuiControl, Disable, Alarm
-GuiControl, Disable, Drop_Crystal
-GuiControl, Disable, Debug_Mod
-GuiControl, Disable,Anounce_Sell
-GuiControl, Disable,Selling_time
-GuiControl, Disable, Start RPG MO
-GuiControl, Disable, Run to Stash
-GuiControl, Disable, Walk_Speed
-GuiControl, Disable, price
-GuiControl, Disable, PetBox
-GuiControl, Disable, Alarm
-GuiControl, Disable, Drop_Crystal
-GuiControl, Disable, Debug_Mod
-GuiControl, Disable, Tree_type
-GuiControl, Disable, Fish_Location
-GuiControl, Disable, mine_Location
- 
- 
-WinActivate,%Game_Title%
- 
-Work_And_Stash()
+gosub, Select_Again
 return
- 
-Work_And_Stash(){
-Going2stash()
-Stashing()
- 
-IF (loops = Selling_time)
-{
-IF (Wood = 1){ 
-LV_Modify(1,,,,"Going to Stash and Selling" Tree_type2 )
-}
-IF (Sand = 1){ 
-LV_Modify(1,,,,"Going to Stash and Selling Sand")
-}
-loops = 0
-Selling(price)
-LV_Modify(1,,,,"Anouncing in trade chat")
-IF (Anounce_Sell = 1){
-IF (Wood = 1){  
-Anounces("[SELL] " Tree_type2 " " Full_INV " For " price "ea")
-}
-IF (sand = 1){  
-Anounces("[SELL]  Sand " Full_INV " For " price "ea")
-}
- 
-Sleep, 700
-}
- 
-}
- 
-GoingBack()
- 
-GuiControl, Enable,Anounce_Sell
-GuiControl, Enable, Start RPG MO
-GuiControl, Enable, Run to Stash
-GuiControl, Enable, Walk_Speed
-GuiControl, Enable, price
-GuiControl, Enable, PetBox
-GuiControl, Enable, Alarm
-GuiControl, Enable, Drop_Crystal
-GuiControl, Enable, Debug_Mod
-GuiControl, Enable, Tree_type
-GuiControl, Enable,Anounce_Sell 
-GuiControl, Enable, Start RPG MO
-GuiControl, Enable, Start Bot
-GuiControl, Enable, Walk_Speed
-GuiControl, Enable, price
-GuiControl, Enable, PetBox
-GuiControl, Enable, Alarm
-GuiControl, Enable, Drop_Crystal
-GuiControl, Enable, Debug_Mod
-GuiControl, Enable, Fish_Location
-GuiControl, Enable, mine_location
- 
-}
-return
- 
-Selling(Funcy_Price){
- 
-IF (Fish = 1)
-{
-return
-}
- 
- IF (mine = 1)
-{
-LV_Modify(1,,,,"Selling " mine_Location2 " wood in the market for: " Funcy_Price )
-}
- 
-IF (Wood = 1)
-{
-LV_Modify(1,,,,"Selling " Tree_type2 " wood in the market for: " Funcy_Price )
-}
- 
-IF (Sand = 1)
-{
-LV_Modify(1,,,,"Selling Sand in the market for: " Funcy_Price )
-}
- 
- 
-   click, 465 114
-   Sleep, 1000
-   click, 546 114
-   Sleep, 1000
-   click, 394 179
-   Sleep, 1000
-   Send, %Tree_type2% 
-   Sleep 700
-   Send {Enter}
-   Sleep 700
-   click, 398 234
-   Click 2
-   send %Funcy_Price%
-   Sleep 700
-   click, 493 265
-   Sleep, 1000
-   click, 388 320
-   Sleep, 1000
- 
-IF (Wood = 1)
-{
-LV_Modify(1,,,, Tree_type2 " wood sold in the market for: " Funcy_Price ) 
-}
- 
-IF (Sand = 1)
-{
-LV_Modify(1,,,, "Sand sold in the market for: " Funcy_Price ) 
-}
- 
-Sleep 700
-}
-return
- 
- 
- 
- 
- 
-GoingBack(){
- 
- 
-IF (Fish = 1)
-{
-GuiControlGet,Fish_Location2,,Fish_Location
-LV_Modify(1,,,,"Going back fishing")  
- 
-IF (Fish_Location2 = "Dorpat")
-{
-FileReadLine,Fish_Back,FishingDorpat.rmb,2
-K(Fish_Back)
- }
- 
-}
- 
-IF (Sand = 1)
-{
-LV_Modify(1,,,,"Going to Sand")  
-FileReadLine,Sand_Back,DiggerReval.rmb,2
-K(Sand_Back)
-}
- 
-IF (Wood = 1)
-{
-   GuiControlGet, Tree_type2,, Tree_type 
-   LV_Modify(1,,,,"Going to " Tree_type2 " tree")  
-   Sleep, 400
- 
-IF (Tree_type2 = "Cactus")
-{
-FileReadLine,Cactus_Back,Cactus.rmb,2
-K(Cactus_Back)
-  }
- 
-IF (Tree_type2 = "Maple")
-{ 
-FileReadLine,Maple_Back,Maple.rmb,2
-K(Maple_Back)
 }
 
-}
- 
-IF (Wood = 1)
+FileReadLine,Read_Type,%Script%,1
+FileReadLine,Read_Exp,%Script%,2
+FileReadLine,Stash,%Script%,3
+FileReadLine,Read_Chest_Click,%Script%,4
+FileReadLine,Back,%Script%,5
+FileReadLine,Read_Info,%script%,6
+StringReplace, NewStr, Read_Info,|,`n, All
+FileReadLine,startCheck,%script%,7
+
+
+IF NOT (startCheck = "Disable start info")
 {
-LV_Modify(1,,,,"Cutting " Tree_type2 " tree")
+MsgBox, 262212, How to use Script:, %NewStr%`n`nDisable this Info at start up
+IfMsgBox,Yes
+FileAppend,`nDisable start info,%script%
 }
+
+WinWait,%Game_Title%
+WinMove,%Game_Title%,,,,906,705
+
+Gui, 1:New, +LastFound -Caption +AlwaysOnTop
+Gui, Margin, 0, 0
+Gui Add, Text, x8 y8 w100 h15, Script Info/Help:
+Gui Add, Button, x8 y24 w49 h23 gHelp, Script
  
-IF (Sand = 1)
-{
-LV_Modify(1,,,,"Digging Sand")
-}
- 
-IF (Fish = 1)
-{
-LV_Modify(1,,,,"Fishing")
-}
- 
-Sleep, 300
+Gui Add, Text, x104 y8 w74 h13, Pet +inventory:
+Gui Add, Radio, x104 y24 w55 h23 Checked vPet0, No Pet
+Gui Add, Radio, x168 y24 w30 h23 vPet4, 4
+Gui Add, Radio, x208 y24 w30 h23 vPet8, 8
+Gui Add, Radio, x248 y24 w30 h23 vPet12, 12
+Gui Add, Radio, x288 y24 w30 h23 vPet16, 16
+
+
+Gui Add, Text, x336 y8 w74 h13, %Read_Type% Sell Price:
+Gui Add, Edit, x336 y24 w30 h20 vprice, 200
+
+Gui Add, Text, x536 y8 w74 h13, Sell %Read_Type% Every:
+Gui Add, Edit, x536 y24 w30 h20 vSelling_time, 20
+
+Gui Add, CheckBox, x384 y24 w139 h20  Checked  vAnounce_Sell, Announce selling in Chat
+
+Gui, Add, ListView,grid  x8 y56 w850 h62 ,Account|Runs|Status|%Read_Type% Stashed|Profit|XP Gained
+LV_ModifyCol(1, 100) , LV_ModifyCol(2, 40) , LV_ModifyCol(3, 255) , LV_ModifyCol(4, 85) , LV_ModifyCol(5, 70) , LV_ModifyCol(6,80), LV_Add(1,"","","","","",""), LV_Modify(1,,Account,0,"Not Started",0,0,0)
+
+Gui Add, Button, x8 y136 w90 h23 gStart_Bot, Start
+Gui Add, Button, x216 y136 w90 h23 gSettings, Settings file
+Gui Add, Button, x112 y136 w90 h23 gSFolder, Script Folder
+Gui Add, Link, x320 y144 w56 h13, <a href="https://github.com/floowsnaake/RPG-MO---All-in-one-Bot">Homepage</a>
+Gui Add, Link, x392 y144 w73 h13, <a href="http://rpg-mo.wikia.com/wiki/Main_Page">RPG MO Wiki</a>
+
+GuiControl,Choose,Location,%Read_Location%
+SetParentByClass("Chrome_WidgetWin_0", 1)
+Gui Show, x0 y500 w967 h172, 1
+WinActivate,%Game_Title%
+return
+
+Help:
+MsgBox, 262208,Script Info/Help, %NewStr%
+return
+
+SFolder:
+run, explore %A_ScriptDir%/Scripts
+return
+Settings:
+run, notepad "RPG MO Bot2.ini"
+return
+
+Start_Bot:
+Botkey:
+Gui, Submit ,NoHide
+WinActivate,%Game_Title%
+WinWaitActive,%Game_Title%
+
+IF Pet0
+Full_inv = 39
+IF  Pet4
+Full_inv = 42
+IF Pet8
+Full_inv = 46
+IF Pet12
+Full_inv = 50
+IF Pet16
+Full_inv = 54
+
 loops+= 1
 Runs+= 1
 LV_Modify(1,,,Runs)
- 
-}
-return
- 
- 
- 
- 
-Going2stash(){
-Global Full_INV
-Global XP
- 
- 
-IF (Fish = 1)
-{
-LV_Modify(1,,,,"Going to Stash")
-GuiControlGet, Fish_Location2,, Fish_Location 
-Full_INV += 39
-}
- 
-IF (Sand = 1)
-{
-LV_Modify(1,,,,"Going to Stash")
-Full_INV += 39
-XP += 390
-}
- 
-IF (Wood = 1)
-{
-   LV_Modify(1,,,,"Going to Stash")
-    GuiControlGet, Tree_type2,, Tree_type 
-      Full_INV += 39
- 
-     IF (Tree_type2 = "Fir")
-   {
-      XP += 195
-   }
-     IF (Tree_type2 = "Cactus")
-   {
-      XP += 312
-   }
-     IF (Tree_type2 = "Oak")
-   {
-      XP += 507
-}
-     IF (Tree_type2 = "Willow")
-   {
-      XP += 702
-}
-     IF (Tree_type2 = "Maple")
-   {
-      XP += 897
-}
-     IF (Tree_type2 = "Spirit")
-   {
-      XP += 1170
-}
-     IF (Tree_type2 = "Blue Palm")
-   {
-      XP += 1755
-}
-     IF (Tree_type2 = "Magic Oak")
-   {
-      XP += 2145
-   }
-}
-   LV_Modify(1,,,,,Full_INV)
-   LV_Modify(1,,,,,,Full_INV*price "$") 
-   LV_Modify(1,,,,,,,XP)
- 
-   Sleep, 300
- 
-IF (Wood = 1)
-{
-    IF (Tree_type2 = "Maple")
-   {
-FileReadLine,Maple_Back,Maple.rmb,1
-K(Maple_Back)
-Sleep, 300
-   }
- 
-    IF (Tree_type2 = "Cactus")
-   {
 
-   Sleep, 300
-}
-}
- 
-IF (fish = 1)
-{
- 
-IF (Fish_Location2 = "Dorpat")
-{
+INV += Full_inv
 
+XP += Full_inv*Read_Exp
+
+LV_Modify(1,,,,,INV)
+LV_Modify(1,,,,,,INV*price "$") 
+LV_Modify(1,,,,,,,XP)
+
+LV_Modify(1,,,,"Going to stash")  
+K(Stash)
 Sleep, 300
-}
- 
-}
- 
-IF (Sand = 1)
+
+click, %Read_Chest_Click% 
+Sleep, 500
+click, %Read_Chest_Click% 
+Sleep, 1000
+
+LV_Modify(1,,,,"Stashing the " Read_Type) 
+
+K("E 2")
+
+IF NOT Pet0
 {
-FileReadLine,Sand_Stash,DiggerReval.rmb,1
-K(Sand_Stash)
-Sleep, 300
+K("Z 2")
+K("E 2")
 }
-}
-return
- 
- 
- 
- 
-Stashing(){
- 
-IF (Wood = 1)
+
+IF (loops = Selling_time)
 {
-LV_Modify(1,,,,"Stashing "  Tree_type2 " woods")
-}
- 
-IF (Sand = 1)
+loops = 0
+LV_Modify(1,,,,"Selling " Read_Type " in the market for: " price)
+click, 465 114
+Sleep, 1000
+click, 546 114
+Sleep, 1000
+click, 394 179
+Sleep, 1000
+SendRaw, %Read_Type% 
+Sleep 700
+Send {Enter}
+Sleep 700
+K("Tab 3")
+send %price%
+Sleep 700
+click, 493 265
+Sleep, 1000
+click, 388 320
+Sleep, 1000
+
+LV_Modify(1,,,, Read_Type " sold in the market for: " price ) 
+
+
+IF (Anounce_Sell = 1)
 {
-LV_Modify(1,,,,"Stashing Sand")
+Sleep, 700
+K("Enter 1")
+Sleep, 3000
+K("Up 4")
+Sleep, 3000
+SendRaw,[sell] %Read_Type% for %price% ea
+Sleep, 4000
+K("Enter 1")
+Sleep, 3000
 }
- 
-IF (Fish = 1)
-{
-LV_Modify(1,,,,"Stashing Fish")
 }
- 
-   Sleep, 500
-   send, {E Down}
-   Sleep, 300
-   send, {E Up}
-   Sleep, 1000
- 
-   IF (Petbox = 1)
-   {
-      LV_Modify(1,,,,"Stashing Pets Inventory") 
-      Click 831,374
-      Sleep 500
-      Click 831,374
- 
-      Sleep, 1000
-      send, {E Down}
-      Sleep, 300
-      send, {E Up}
-      Sleep, 2000
-   }
-   LV_Modify(1,,,, "Inventory Stashed")
-}
+LV_Modify(1,,,,"Going back")
+K(Back)
+LV_Modify(1,,,,"Working...")  
 return
- 
-Anounces(message){
-   Sleep, 700
-   send, {Enter}
-   Sleep, 3000
-   K("Up|3")
-   Sleep, 3000
-   SendRaw,%message%
-   Sleep, 4000
-   send, {Enter}
-   Sleep, 3000
-}
-return
- 
-C(clc,x,y){
-   Loop, %clc%
-   {
-      Click %x%, %y%   
-      Click Down Left
-      Sleep, 300   
-      Click up Left
-   }
-}
-return
- 
- 
+
+
 K(multipleKeyTimes){
     Loop, Parse, multipleKeyTimes,`,
     {
-        keyOrTimes:=StrSplit(A_LoopField,"|")
+        keyOrTimes:=StrSplit(A_LoopField,A_Space)
         Loop % keyOrTimes[2] {
-            Random, Sleepy, 230, 240
+            Random, Sleepy, 130, 140
             Send, % "{" keyOrTimes[1]" Down}"
             Sleep, % Sleepy
             Send, % "{" keyOrTimes[1]" Up}"
-            Sleep 200
+            Sleep 250
         }
         Sleep, 100
     }
 }
 return
- 
+
 HideKey:
 {
 hid++
  
 IF (hid = 1)
 {
-WinSetTitle,%Game_Title%,,%Original_Title%
-WinMove,%Original_Title%,,,,906,539
-WinActivate,%Original_Title%
-WinWaitActive,%Original_Title%
+WinMove,%Game_Title%,,,,906,539
+WinActivate,%Game_Title%
+WinWaitActive,%Game_Title%
 }
  
 IF (hid = 2)
 {
 hid = 0
-WinSetTitle,%Original_Title%,,%Game_Title%
 WinMove,%Game_Title%,,,,906,705
 SetParentByClass("Chrome_WidgetWin_0", 1)
 WinActivate,%Game_Title%
@@ -860,22 +296,7 @@ WinWaitActive,%Game_Title%
  
 }
 return
- 
-^Esc::
-ExitApp
-return
- 
-Quit:
-WinSetTitle,%Game_Title%,,%Original_Title%
-WinMove,%Original_Title%,,,,906,539
-send, {Up Up}
-send, {Down Up}
-send, {Right Up}
-send, {Left Up}
-ExitApp
-return
- 
- 
+
 SetParentByClass(Window_Class, Gui_Number)
 { 
     Parent_Handle := DllCall( "FindWindowEx", "uint",0, "uint",0, "str", Window_Class, "uint",0) 
@@ -890,3 +311,9 @@ SetParentByTitle(Window_Title_Text, Gui_Number)
     Gui, %Gui_Number%: +LastFound 
     Return DllCall( "SetParent", "uint", WinExist(), "uint", Parent_Handle )
 }
+
+^Esc::
+Quit:
+WinMove,%Game_Title%,,,,906,539
+ExitApp
+return
