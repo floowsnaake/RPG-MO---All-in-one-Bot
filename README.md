@@ -60,12 +60,16 @@ __Running the script:__
 * 9) Select what option you want to run/bot. 
 
 
-So now the bot is running :D
-
-    
+So now the bot is running :D  
 
 
+How to make your own Script:
 
+
+So now the bot is running :D  
+
+
+[Make your own script](https://github.com/floowsnaake/RPG-MO---All-in-one-Bot/blob/master/Scripts/How%20to%20make%20a%20script.txt)
 
 
 tags:
