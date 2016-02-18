@@ -1,4 +1,10 @@
 # RPG MO - All in one Bot
+
+
+![Alt text](http://i.imgur.com/top1r0c.png "RPG MO - All in One Bot")
+
+Note that not all the futures are inplemented from the screnshoot
+
 So what is? RPG MO - All in one Bot
 
 It is a bot for the game RPG MO that can train skills such as Woodcutting,fishing and Digging sand but i will/im currelty addings more skills all the time and the goal is to add all the skills in the game and make it do things like,auto hunt and kill mobs/AutoFight,Market Bot/sniping,soulve capatchas,being able to run the bot with any browser and not just the client version of the game,running more then 1 bot at the time/multiboxing bot and also making the bot run AFK/so you dont have to have the game open while it is botting.
