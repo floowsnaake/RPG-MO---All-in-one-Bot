@@ -1,32 +1,47 @@
 /*
 Script name: RPG MO - All in One Bot
 Made by: FloowSnaake
-Autohotkey version: v1.1.23.01
+Autohotkey version: v1.1.23.05
 Tested on: Windows 7 64 Bit Ultimate and Windows 8 32 Bit
 Started working Date: 12/11/2015
-Latest Build date: 28/03/2016
+Latest Build date: 07/04/2016
 
 For more info:
 https://github.com/floowsnaake/RPG-MO---All-in-one-Bot
  
 */
 
+#MaxHotkeysPerInterval 99000000
+SetWorkingDir, %A_ScriptDir%
+#HotkeyInterval 99000000
+#KeyHistory 0
+ListLines Off
+SetBatchLines, -1
+SetKeyDelay, -1, -1
+SetMouseDelay, -1
+SetDefaultMouseSpeed, 0
+SetWinDelay, -1
+SetControlDelay, -1
+SendMode Input
 #SingleInstance Force
 OnExit, Quit
-SetWorkingDir, %A_ScriptDir%
+
 
 CoordMode, Mouse, Client
 CoordMode, Pixel, Client
 CoordMode, ToolTip, Client
 
 Global Walkspeed
+Global outputvar
+Global Mouse_Chest1
+Global Mouse_Chest2
 
-   IfExist,RPG MO Bot2.ini
+   IfExist,RPG MO Bot Config.ini
    {
-      FileReadLine,Read_Acc,RPG MO Bot2.ini,1
-      FileReadLine,Read_StartKey,RPG MO Bot2.ini,2
-     ; FileReadLine,Read_HideKey,RPG MO Bot2.ini,3
-      FileReadLine,Read_Steam,RPG MO Bot2.ini,3
+      FileReadLine,Read_Acc,RPG MO Bot Config.ini,1
+      FileReadLine,Read_StartKey,RPG MO Bot Config.ini,2
+     ; FileReadLine,Read_HideKey,RPG MO Bot Config.ini,3
+      FileReadLine,Read_Steam,RPG MO Bot Config.ini,3
       
      ; Hotkey,%Read_HideKey%,Hidekey
       Hotkey,%Read_StartKey%,Botkey
@@ -46,41 +61,12 @@ Global Walkspeed
       }
       
    }
- 
-IfNOTExist,RPG MO Bot2.ini
-{
-      Gui, Start: Add, Text, w110 h20,Account
-      Gui, Start: Add, Edit, w100 h20 vAcc, Account name
- 
-      Gui, Start: Add, Text, w110 h20 ,Bot Start Hotkey:
-      Gui, Start: Add, Hotkey, w70 h20 vStartKey,^T
-      
-      ;Gui, Start: Add, Text, w110 h20 ,Bot Hide Hotkey:
-      ;Gui, Start: Add, Hotkey, w70 h20 vHideKey,F1
-      
-      Gui, Start: Add, Checkbox,vSteam,Steam version
-      Gui, Start: Add, Button,gsave, Save
- 
-      Gui, Start: Show,w160, Settings
-      return
- 
-      save:
-      Gui, Start: Submit
-      FileAppend,%Acc%`n%StartKey%`n%Steam%,RPG MO Bot2.ini
-     Reload
-      return
-}
 
-Process, Exist, %Procces%
-IF !errorlevel=1
-{
-MsgBox, Start the RPG MO Client and login then start the bot
-ExitApp
-}
+
 
 Gui, Lunch: Color, White
-Gui, Lunch: Add, Button, x8 y272 w75 h23 gStart_Bot_gui, Start Bot
-Gui, Lunch: Add, Button, x96 y272 w115 h23 gStart_Script_Maker, Start the Script Maker
+Gui, Lunch: Add, Button, x8 y272 w75 h23 gStart_Bot_gui, Run Bot
+Gui, Lunch: Add, Button, x96 y272 w115 h23 gStart_Script_Maker, Run Script Maker
 Gui, Lunch: Add, GroupBox, x8 y320 w187 h70, Download RPG MO Client
 Gui, Lunch: Add, Button, x112 y352 w75 h23 gsteam, Steam
 Gui, Lunch: Add, Button, x16 y352 w75 h23 gRpg, Normal
@@ -100,8 +86,8 @@ Gui, Lunch: Add, Text, x40 y152 w100 h23 +0x200, Works with your Pet
 Gui, Lunch: Add, Picture, x8 y144 w32 h32, %A_ScriptDir%\Data\circus-llama.png
 Gui, Lunch: Add, Text, x8 y200 w227 h23 +0x200, More Skills and Futures will be added soon   `;)
 Gui, Lunch: Add, Text, x8 y248 w125 h23 +0x200, What do you want to do?
-Gui, Lunch: Add, Text, x248 y400 w39 h23 +0x200, Gui, Lunch: v3
-Gui, Lunch: Show, w282 h423, RMAIOB Menu
+Gui, Lunch: Add, Text, x248 y400 w39 h23 +0x200, Gui: v4
+Gui, Lunch: Show, w282 h423, RPG MO Bot Menu
 Return
 
 LunchGuiClose:
@@ -116,8 +102,53 @@ Run, http://store.steampowered.com/app/372800
 return
 
 Start_Bot_gui:
-Gui, Lunch: Destroy 
+IfExist,RPG MO Bot Config.ini
+{
+Gui, Lunch: Destroy
+gosub,BotMode
+}
+
+
+IfNOTExist,RPG MO Bot Config.ini
+{
+ 
+ MsgBox, 4160, First Time Running, Hey and welcome to RPG MO Bot`n`nFirst of all make sure that you have downloaded the RPG MO Client and that you have logged in to the game`n`nMake sure that you read all the information in the next window and apply those settings to the game or else the bot will not work.`n`nFloowSnaake 2016-04-06
+ 
+ Gui, Start: Color, White
+ Gui, Start:  Add, Tab2, x-8 y-3 w278 h397, Game Settings|Bot Settings
+ 
+ Gui, Start:  Add, Text, x7 y32 w256 h20 0x50000000, Make sure that RPG MO Have the following settings:
+ Gui, Start:  Add, Text, x14 y73 w111 h23 +0x200, Game max size(1.25x)
+ Gui, Start:  Add, Text, x136 y72 w91 h23 +0x200, Game grid(13x13)
+ Gui, Start:  Add, Text, x14 y105 w185 h23 +0x200, Interface size`,  set this to the smallest 
+ Gui, Start:  Add, GroupBox, x8 y56 w240 h90, Menu --> Game Options --> Video
+ Gui, Start:  Add, GroupBox, x6 y153 w232 h56, Menu --> Wiki & Mods menu
+ Gui, Start:  Add, Text, x22 y177 w152 h23 +0x200, Press "Select All" then "Load"
+ Gui, Start:  Add, GroupBox, x6 y217 w232 h125, Menu --> Keybindings
+ Gui, Start:  Add, Text, x22 y241 w125 h20 0x50000000, Deposit All+ in chest = E
+ Gui, Start:  Add, Text, x22 y273 w125 h20 0x50000000, Unload pet inventory = Z
+ Gui, Start:  Add, Text, x22 y305 w125 h20 0x50000000, Toggle inventory = Q
+
+ Gui, Start:  Add, Text, x10 y349 w150 h23 +0x200, Now Go to the Bot Settings Tab
+ Gui, Start:  Tab, 2
+ Gui, Start:  Add, Text, x7 y34 w84 h20 0x50000000, Account Name:
+ Gui, Start:  Add, Edit, x7 y58 w100 h20 0x50010080 vAcc, username
+ Gui, Start:  Add, Text, x7 y82 w110 h20 0x50000000, Bot Start Hotkey:
+ Gui, Start:  Add, Hotkey, x7 y106 w70 h20 0x50010000 vStartKey, F3
+ Gui, Start:  Add, CheckBox, x7 y138 w89 h13 0x50010003 vSteam, Steam version
+ Gui, Start:  Add, Button, x7 y162 w90 h23 0x50010000 gsave, Save settings
+
+ Gui, Start:  Show, w266 h385, First Time Config
+Return
+
+
+save:
+Gui, Start: Submit
+Gui, Lunch: Destroy
+FileAppend,%Acc%`n%StartKey%`n%Steam%,RPG MO Bot Config.ini
 gosub, BotMode
+return
+}
 return
 
 Start_Script_Maker:
@@ -254,6 +285,19 @@ MsgBox, Saved %ScriptName%
 return
 
 BotMode:
+FileRead,Cfg,RPG MO Bot Config.ini
+IF errorlevel
+{
+MsgBox, 4112,Settings Error,Delete your RPG MO Bot Config.ini in the Bot folder and then restart the Bot.
+}
+
+Process, Exist, %Procces%
+IF !errorlevel=1
+{
+MsgBox, 4112, RPG MO Client ERROR, Can't find: %Procces%`n`nPlease start %Procces% and Login to your account then restart RPG MO Bot.
+ExitApp
+}
+
 Select_Again:
 FileSelectFile, Script, 3,,Load a script, Script (*.path)
 IF Script =
@@ -273,6 +317,9 @@ FileReadLine,Read_Info,%script%,6
 StringReplace, NewStr, Read_Info,|,`n, All
 FileReadLine,startCheck,%script%,7
 
+FileReadLine,Read_Chest_Click,%Script%,4
+StringSplit,Mouse_Chest,Read_Chest_Click,|,all
+
 
 IF NOT (startCheck = "Disable start info")
 {
@@ -290,6 +337,7 @@ WinSet, Style, -0x30000, %Game_Title%
 WinSet, Style, -0x40000, %Game_Title%
 
 WinWaitActive,%Game_Title%
+ControlGet, OutputVar, Hwnd,,Chrome_RenderWidgetHostHWND1,%Game_Title%
 WinMove,%Game_Title%,,,,906,705
 
 Gui Color, White
@@ -297,7 +345,7 @@ Gui, 1:New, +LastFound -Caption +AlwaysOnTop
 Gui, Margin, 0, 0
 Gui Add, Text, x8 y8 w100 h15, Script Info/Help:
 Gui Add, Button, x8 y24 w49 h23 gHelp, Script
- Gui Add, Text, x104 y8 w74 h13, Pet +inventory:
+Gui Add, Text, x104 y8 w74 h13, Pet +inventory:
 Gui Add, Radio, x104 y24 w55 h23 Checked vPet0, No Pet
 Gui Add, Radio, x168 y24 w30 h23 vPet4, 4
 Gui Add, Radio, x208 y24 w30 h23 vPet8, 8
@@ -315,6 +363,7 @@ Gui Add, Text, x656 y8 w78 h12, Walking Speed:
 Gui Add, ComboBox, x640 y24 w100 ReadOnly vWalkspeed,Extremely Slow|Very Slow|Slow|Normal|Fast|Very Fast|Extremely Fast
 
 Gui Add, CheckBox, x752 y24 w120 h23 Checked vclick_chest, Click on chest
+;Gui Add, CheckBox, x752 y4 w120 h23 Checked vAuto_Loop, Loop
 
 Gui Add, CheckBox, x384 y24 w139 h20  Checked  vAnounce_Sell, Announce selling in Chat
 
@@ -332,7 +381,7 @@ GuiControl,Choose,Location,%Read_Location%
 GuiControl, Choose, Walkspeed, Normal
 
 SetParentByClass("Chrome_WidgetWin_0", 1)
-
+ControlGet, OutputVar, Hwnd,,Chrome_RenderWidgetHostHWND1,%Game_Title%
 
 Gui Show, x0 y505 w967 h172, 1
 WinActivate,%Game_Title%
@@ -363,8 +412,6 @@ return
 Start_Bot:
 Botkey:
 Gui, Submit ,NoHide
-WinActivate,%Game_Title%
-WinWaitActive,%Game_Title%
 
 hid = 0
 Sleep, 200
@@ -396,46 +443,51 @@ LV_Modify(1,,,,"Going to stash")
 K(Stash)
 Sleep, 300
 
+
 IF (click_chest = 1)
-{  
-click, %Read_Chest_Click% 
+{ 
+ControlClick,x%Mouse_Chest1% y%Mouse_Chest2%, ahk_id %outputvar% 
 Sleep, 500
-click, %Read_Chest_Click% 
-Sleep, 1000
+ControlClick,x%Mouse_Chest1% y%Mouse_Chest2%, ahk_id %outputvar% 
+Sleep, 2000
 }
 
 LV_Modify(1,,,,"Stashing the " Read_Type) 
-
-K("E 2")
+Sleep, 200
+K("E 3")
+Sleep, 1000
 
 IF NOT Pet0
 {
-K("Z 2")
-K("E 2")
+K("Z 3")
+Sleep, 1500
+K("E 3")
+Sleep, 1500
 }
 
 IF (loops = Selling_time)
 {
 loops = 0
 LV_Modify(1,,,,"Selling " Read_Type " in the market for: " price)
-click, 465 114
+ControlClick,x465 y114, ahk_id %outputvar%
 Sleep, 1000
-click, 546 114
+ControlClick,x546 y114, ahk_id %outputvar%
 Sleep, 1000
-click, 394 179
+ControlClick,x394 y179, ahk_id %outputvar%
 Sleep, 1000
-SendRaw, %Read_Type% 
+ControlSend,%Read_Type%, ahk_id %outputvar%
 Sleep 700
-Send {Enter}
+ControlSend,, {Enter}, ahk_id %outputvar%
 Sleep 700
-Click, 458, 235
-click, 2
+ControlClick,x458, y235, ahk_id %outputvar%
+Sleep, 200
+ControlClick,x458, y235, ahk_id %outputvar%
 Sleep 700
-send %price%
+ControlSend,, %price%, ahk_id %outputvar%
 Sleep 700
-click, 493 265
+ControlClick,x493 y265, ahk_id %outputvar%
 Sleep, 1000
-click, 388 320
+ControlClick,x388 y320, ahk_id %outputvar%
 Sleep, 1000
 
 LV_Modify(1,,,, Read_Type " sold in the market for: " price ) 
@@ -489,10 +541,10 @@ K(multipleKeyTimes){
             }
             else
                 Random, Sleepy, 140, 130
-            
-            Send, % "{" keyOrTimes[1]" Down}"
+             ControlFocus,,ahk_id %outputvar%
+            ControlSend,, % "{" keyOrTimes[1]" Down}", ahk_id %outputvar%
             Sleep, % Sleepy
-            Send, % "{" keyOrTimes[1]" Up}"
+            ControlSend,, % "{" keyOrTimes[1]" Up}", ahk_id %outputvar%
             
             IF (Walkspeed = "Extremely Slow")
             { 
@@ -504,11 +556,11 @@ K(multipleKeyTimes){
              }
             IF (Walkspeed = "Slow")
             { 
-            Sleep 300
+            Sleep 400
              }
             IF (Walkspeed = "Normal")
             { 
-            Sleep 250
+            Sleep 300
              }
             IF (Walkspeed = "Fast")
             { 
@@ -534,10 +586,21 @@ SetParentByClass(Window_Class, Gui_Number)
     Gui, %Gui_Number%: +LastFound 
     Return DllCall( "SetParent", "uint", WinExist(), "uint", Parent_Handle )
 }
- 
+
 
 ^Esc::
 Quit:
+
+ControlSend,,{W}, ahk_id %outputvar%
+ControlSend,,{A}, ahk_id %outputvar%
+ControlSend,,{S}, ahk_id %outputvar%
+ControlSend,,{D}, ahk_id %outputvar%
+
+ControlSend,,{Up}, ahk_id %outputvar%
+ControlSend,,{Down}, ahk_id %outputvar%
+ControlSend,,{Left}, ahk_id %outputvar%
+ControlSend,,{Right}, ahk_id %outputvar%
+
 WinSet, Style, +0x30000,%Game_Title%
 WinSet, Style, +0x40000, %Game_Title%
 WinMove,%Game_Title%,,,,906,539
