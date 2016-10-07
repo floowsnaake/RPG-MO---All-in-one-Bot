@@ -1,12 +1,12 @@
 # RPG MO - All in one Bot
 
-Prewiew of the bot running:
+RPG MO - All in one Bot in acion:
+![Alt text](http://i.imgur.com/A0L8LCZ.jpg "RPG MO - All in One Bot")
 
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/tMCopyi8ynk/0.jpg)](http://www.youtube.com/watch?v=tMCopyi8ynk)
-
+Currently working on a GUI update:
 ![Alt text](http://image.prntscr.com/image/90dee64beb83493a96aca38a6c49dde1.png "RPG MO - All in One Bot")
 
-![Alt text](http://i.imgur.com/A0L8LCZ.jpg "RPG MO - All in One Bot")
+
 
 Note that not all the futures are inplemented from the screnshoot
 
