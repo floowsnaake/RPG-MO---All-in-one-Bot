@@ -1,7 +1,8 @@
 # RPG MO - All in one Bot
 
 Prewiew of the bot running:
-![Alt text](https://www.youtube.com/watch?v=tMCopyi8ynk "RPG MO - All in One Bot")
+
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/tMCopyi8ynk/0.jpg)](http://www.youtube.com/watch?v=tMCopyi8ynk)
 
 ![Alt text](http://image.prntscr.com/image/90dee64beb83493a96aca38a6c49dde1.png "RPG MO - All in One Bot")
 
