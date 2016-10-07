@@ -12,10 +12,10 @@ RPG MO - All in one Bot in acion:
 ![Alt text](http://i.imgur.com/A0L8LCZ.jpg "RPG MO - All in One Bot")
 
 Currently working on a GUI update:
-![Alt text](http://image.prntscr.com/image/90dee64beb83493a96aca38a6c49dde1.png "RPG MO - All in One Bot v2")
+![Alt text](http://image.prntscr.com/image/90dee64beb83493a96aca38a6c49dde1.png "RPG MO - All in One Bot v2 Alpha")
 
 updated the bot to be able to load the new script/Ini format
-![Alt text](http://image.prntscr.com/image/20d29d50a0544bf6b3adafd5d8b52033.png "RPG MO - All in One Bot v2")
+![Alt text](http://image.prntscr.com/image/20d29d50a0544bf6b3adafd5d8b52033.png"RPG MO - All in One Bot v2 Alpha Update")
 
 Note that not all the futures are inplemented from the screnshoot
 
