@@ -2,9 +2,9 @@
 Script name: RPG MO - All in One Bot
 Made by: FloowSnaake
 Autohotkey version: v1.1.23.05
-Tested on: Windows 7 64 Bit Ultimate and Windows 8 32 Bit
+Tested on: Windows 7,8,10
 Started working Date: 12/11/2015
-Latest Build date: 07/04/2016
+Latest Build date: 2016/10/08
 
 For more info:
 https://github.com/floowsnaake/RPG-MO---All-in-one-Bot
@@ -147,7 +147,7 @@ save:
 Gui, Start: Submit
 Gui, Lunch: Destroy
 FileAppend,%Acc%`n%StartKey%`n%Steam%,RPG MO Bot Config.ini
-gosub, BotMode
+Reload
 return
 }
 return
@@ -343,7 +343,7 @@ Iniread,Var_transfer2Pet,%Script%,Pet,Auto Transfer Loot/items to Pet Whn player
 
 
 WinActivate,%Game_Title%
-WinMove,%Game_Title%,,,,906,705
+WinMove,%Game_Title%,,,,0,0
 
 Gui Color, White
 
@@ -357,8 +357,10 @@ Gui Add, Button, x8 y144 w90 h23, Script Manger
 Gui Add, Link, x400 y144 w56 h13, <a href="https://github.com/floowsnaake/RPG-MO---All-in-one-Bot">Bot Page </a>
 Gui Add, Link, x520 y144 w73 h13, <a href="http://rpg-mo.wikia.com/wiki/Main_Page">RPG MO Wiki</a>
 
-Gui Show, AutoSize, 1
+Gui Show, AutoSize, RPG MO Bot v2 - %Var_Script%
+LV_Modify(1,sss)
 WinActivate,%Game_Title%
+WinActivate,RPG MO Bot v2 - %Var_Script%
 return
 
 Help:
@@ -405,7 +407,7 @@ LV_Modify(1,,,,,INV)
 LV_Modify(1,,,,,,INV*price "$") 
 LV_Modify(1,,,,,,,XP)
 
-LV_Modify(1,,,,"Going to stash")  
+LV_Modify(1,,,"Going to stash")  
 K(Var_Chest_Paths)
 Sleep, 300
 
@@ -418,7 +420,7 @@ ControlClick,x%Mouse_Chest1% y%Mouse_Chest2%, ahk_id %outputvar%
 Sleep, 2000
 }
 
-LV_Modify(1,,,,"Stashing the " Read_Type) 
+LV_Modify(1,,,"Stashing the " Read_Type) 
 Sleep, 200
 K("E 3")
 Sleep, 1000
@@ -434,7 +436,7 @@ Sleep, 1500
 IF (loops = Selling_time)
 {
 loops = 0
-LV_Modify(1,,,,"Selling " Read_Type " in the market for: " price)
+LV_Modify(1,,,"Selling " Read_Type " in the market for: " price)
 ControlClick,x465 y114, ahk_id %outputvar%
 Sleep, 1000
 ControlClick,x546 y114, ahk_id %outputvar%
@@ -456,7 +458,7 @@ Sleep, 1000
 ControlClick,x388 y320, ahk_id %outputvar%
 Sleep, 1000
 
-LV_Modify(1,,,, Read_Type " sold in the market for: " price ) 
+LV_Modify(1,,, Read_Type " sold in the market for: " price ) 
 
 
 IF (Anounce_Sell = 1)
@@ -472,75 +474,25 @@ K("Enter 1")
 Sleep, 3000
 }
 }
-LV_Modify(1,,,,"Going back")
-K(Back)
-LV_Modify(1,,,,"Working...")  
+LV_Modify(1,,,"Going back")
+K(Var_Gather_Paths)
+LV_Modify(1,,,"Working...")  
 return
 
 
 K(multipleKeyTimes){
-    Global
-    Loop, Parse, multipleKeyTimes,`|
-    {
-        keyOrTimes:=StrSplit(A_LoopField,A_Space)
-        Loop % keyOrTimes[2] {
-  
+Global
+Loop, Parse, multipleKeyTimes,`|
+{
+keyOrTimes:=StrSplit(A_LoopField,A_Space)
+Loop % keyOrTimes[2] {
 
-            IF (Walkspeed = "Normal")
-            {
-                Random, Sleepy, 140, 130
-            }
-            
-             IF (Walkspeed = "Fast")
-            {
-                Random, Sleepy, 100, 110
-            }
-            
-             IF (Walkspeed = "Very Fast")
-            {
-               Random, Sleepy, 50, 60
-            }
-            
-             IF (Walkspeed = "Extremely Fast")
-            {
-               Random, Sleepy, 15, 20
-            }
-            else
-                Random, Sleepy, 140, 130
-             ControlFocus,,ahk_id %outputvar%
-            ControlSend,, % "{" keyOrTimes[1]" Down}", ahk_id %outputvar%
-            Sleep, % Sleepy
-            ControlSend,, % "{" keyOrTimes[1]" Up}", ahk_id %outputvar%
-            
-            IF (Walkspeed = "Extremely Slow")
-            { 
-            Sleep 1000
-             }
-            IF (Walkspeed = "Very Slow")
-            { 
-            Sleep 600
-             }
-            IF (Walkspeed = "Slow")
-            { 
-            Sleep 400
-             }
-            IF (Walkspeed = "Normal")
-            { 
-            Sleep 300
-             }
-            IF (Walkspeed = "Fast")
-            { 
-            Sleep 100
-             }
-            IF (Walkspeed == "Very Fast")
-            { 
-            Sleep 50
-             }
-            IF (Walkspeed == "Extremely Fast")
-          {  
-            Sleep 10
-           }
-        }
+Random, Sleepy, 140, 130
+send, % "{" keyOrTimes[1]" Down}"
+Sleep, % Sleepy
+send, % "{" keyOrTimes[1]" Up}"
+ Sleep, %Var_Walkingspeed%
+ }
 
 }
 }
@@ -551,18 +503,16 @@ return
 ^Esc::
 Quit:
 
-ControlSend,,{W}, ahk_id %outputvar%
-ControlSend,,{A}, ahk_id %outputvar%
-ControlSend,,{S}, ahk_id %outputvar%
-ControlSend,,{D}, ahk_id %outputvar%
+send,{W}
+send,{A}
+send,{S}
+send,{D}
 
-ControlSend,,{Up}, ahk_id %outputvar%
-ControlSend,,{Down}, ahk_id %outputvar%
-ControlSend,,{Left}, ahk_id %outputvar%
-ControlSend,,{Right}, ahk_id %outputvar%
+send,{Up}
+send,{Left}
+send,{Right}
+send,{Down}
 
-WinSet, Style, +0x30000,%Game_Title%
-WinSet, Style, +0x40000, %Game_Title%
 WinMove,%Game_Title%,,,,906,539
 ExitApp
 return
